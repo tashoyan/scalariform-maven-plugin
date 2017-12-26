@@ -1,5 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.scalariform</groupId>
     <artifactId>scalariform-maven-plugin</artifactId>
@@ -7,46 +8,95 @@
     <packaging>maven-plugin</packaging>
     <name>Maven Scalariform Plugin</name>
     <description>Maven plugin to run Scalariform, a Scala code formatter</description>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <compiler.java.version>1.8</compiler.java.version>
+        <compiler.scala.version>2.11.12</compiler.scala.version>
+        <compiler.scala.compat.version>2.11</compiler.scala.compat.version>
+        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
+        <scala-maven-plugin.version>3.3.1</scala-maven-plugin.version>
+        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+
+        <scalariform.version>0.2.6</scalariform.version>
+        <maven-pligin-api.version>3.5.2</maven-pligin-api.version>
+        <maven-plugin-annotations.version>3.5</maven-plugin-annotations.version>
     </properties>
 
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
-
     <build>
+        <pluginManagement>
+            <plugins>
+
+                <plugin>
+                    <groupId>net.alchim31.maven</groupId>
+                    <artifactId>scala-maven-plugin</artifactId>
+                    <version>${scala-maven-plugin.version}</version>
+                    <configuration>
+                        <args>
+                            <!--https://tpolecat.github.io/2017/04/25/scalac-flags.html-->
+                            <arg>-deprecation</arg>
+                            <arg>-feature</arg>
+                            <arg>-unchecked</arg>
+                            <arg>-explaintypes</arg>
+                            <arg>-Xfatal-warnings</arg>
+                            <arg>-Yno-adapted-args</arg>
+                            <arg>-Ywarn-dead-code</arg>
+                            <arg>-Ywarn-inaccessible</arg>
+                            <arg>-Ywarn-infer-any</arg>
+                            <arg>-Ywarn-nullary-override</arg>
+                            <arg>-Ywarn-nullary-unit</arg>
+                            <arg>-Ywarn-numeric-widen</arg>
+                            <arg>-Ywarn-unused</arg>
+                            <arg>-Ywarn-unused-import</arg>
+                            <arg>-Ywarn-value-discard</arg>
+                            <arg>-Xlint:_</arg>
+                        </args>
+                        <jvmArgs>
+                            <jvmArg>-Xmx2048m</jvmArg>
+                        </jvmArgs>
+                        <source>${compiler.java.version}</source>
+                        <target>${compiler.java.version}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <scalaCompatVersion>${compiler.scala.compat.version}</scalaCompatVersion>
+                        <checkMultipleScalaVersions>true</checkMultipleScalaVersions>
+                        <failOnMultipleScalaVersions>true</failOnMultipleScalaVersions>
+                        <sendJavaToScalac>false</sendJavaToScalac>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <source>${compiler.java.version}</source>
+                        <target>${compiler.java.version}</target>
+                        <fork>true</fork>
+                        <compilerArgs>
+                            <arg>-Xlint:all</arg>
+                            <arg>-deprecation</arg>
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>${maven-gpg-plugin.version}</version>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
         <plugins>
+
             <plugin>
-                <groupId>org.scala-tools</groupId>
-                <artifactId>maven-scala-plugin</artifactId>
-                <version>2.15.2</version>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>scala-compile-first</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>scala-test-compile</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <executions>
-                    <execution>
+                        <id>compile-scala</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>compile</goal>
@@ -54,10 +104,32 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <!--Enforce Scala compilation before Java compilation-->
+                    <execution>
+                        <id>compile-java</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.4</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
@@ -69,29 +141,33 @@
                 </executions>
             </plugin>
         </plugins>
+
     </build>
+
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-            <version>2.10.0</version>
+            <version>${compiler.scala.version}</version>
         </dependency>
         <dependency>
             <groupId>org.scalariform</groupId>
-            <artifactId>scalariform_2.10</artifactId>
-            <version>0.1.4</version>
+            <artifactId>scalariform_${compiler.scala.compat.version}</artifactId>
+            <version>${scalariform.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>2.0.9</version>
+            <version>${maven-pligin-api.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-project</artifactId>
-            <version>2.0.9</version>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>${maven-plugin-annotations.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
+
     <inceptionYear>2011</inceptionYear>
     <url>http://github.com/mdr/scalariform-maven-plugin</url>
     <licenses>
@@ -113,4 +189,5 @@
             <url>https://github.com/mdr/</url>
         </developer>
     </developers>
+
 </project>
