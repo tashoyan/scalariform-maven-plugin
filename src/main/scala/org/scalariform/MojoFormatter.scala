@@ -102,29 +102,30 @@ object MojoFormatter {
     log.info(s"Formatting ${files.size} files")
     log.debug("Source dir: " + sourceDirectory)
     log.debug("Test source dir: " + testSourceDirectory)
-    log.debug(files.mkString("Scalariform files to format:\n", "\n", ""))
+    log.debug(files.mkString("Files to format:\n", "\n", ""))
 
     val encoding = ReaderFactory.FILE_ENCODING
 
-    var count = 0
-
-    //TODO foreach with side effect
-    files.foreach { file =>
+    def formatFile(file: File): Int = {
       try {
         val original = Source.fromFile(file).mkString
         val formatted = ScalaFormatter.format(original, preferences)
         if (original != formatted) {
           FileUtils.fileWrite(file, encoding, formatted)
-          count += 1
-        }
+          1
+        } else 0
       } catch {
         case ex: ScalaParserException =>
-          log.error("Error parsing Scala " + file + ": " + ex.getMessage)
+          log.error("Error parsing Scala code in " + file + ": " + ex.getMessage)
+          0
         case ex: Exception =>
           log.error("Error formatting " + file + ": " + ex)
+          0
       }
     }
-    log.info("Modified " + count + " of " + files.size + " .scala files")
+
+    val modifiedFiles = files.map(formatFile).sum
+    log.info("Modified " + modifiedFiles + " of " + files.size + " files")
   }
 
 }
