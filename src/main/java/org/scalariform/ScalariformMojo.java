@@ -10,23 +10,20 @@ import java.io.File;
 
 /**
  * Goal which formats scala source files
- *
- * @goal format
- * @phase process-sources
  */
-@Mojo(name = "scalariform", defaultPhase = LifecyclePhase.PROCESS_SOURCES, requiresProject = false, threadSafe = true)
+@Mojo(name = "format", defaultPhase = LifecyclePhase.PROCESS_SOURCES, requiresProject = false, threadSafe = true)
 public class ScalariformMojo extends AbstractMojo {
 
     /**
      * Project's source directory as specified in the POM.
      */
-    @Parameter(defaultValue = "${project.build.sourceDirectory}", property = "sourceDirectory", required = true)
+    @Parameter(defaultValue = "${project.build.sourceDirectory}/../scala", property = "sourceDir", required = true)
     private File sourceDirectory;
 
     /**
      * Project's test source directory as specified in the POM.
      */
-    @Parameter(defaultValue = "${project.build.testSourceDirectory}", property = "testSourceDirectory", required = true)
+    @Parameter(defaultValue = "${project.build.testSourceDirectory}/../scala", property = "testSourceDir", required = true)
     private File testSourceDirectory;
 
     /**
