@@ -1,25 +1,20 @@
 package org.scalariform
 
-import scalariform.formatter.preferences._
-import scalariform.formatter.ScalaFormatter
-import scalariform.parser.ScalaParserException
-import scalariform.utils.Utils.writeText
-
-import java.io.{ File, FilenameFilter, FileFilter }
-
-import scala.collection.JavaConversions._
-
-import scala.io.Source
+import java.io.{File, FileFilter, FilenameFilter}
 
 import org.apache.maven.plugin.logging.Log
 
+import scala.io.Source
+import scalariform.formatter.ScalaFormatter
+import scalariform.formatter.preferences._
+import scalariform.parser.ScalaParserException
+
 /**
- * Goal which formats scala source files
- *
- * @goal format
- *
- * @phase process-sources
- */
+  * Goal which formats scala source files
+  *
+  * @goal format
+  * @phase process-sources
+  */
 object MojoFormatter {
 
   val scalaFilter = new FilenameFilter {
@@ -37,6 +32,7 @@ object MojoFormatter {
         findScalaFilesByFile(dir, sum)
       }
     }
+
     findScalaFilesByFile(new File(dirpath), Nil)
   }
 
