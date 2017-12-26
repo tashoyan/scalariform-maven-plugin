@@ -3,6 +3,7 @@ package org.scalariform
 import java.io.{File, FileFilter, FilenameFilter}
 
 import org.apache.maven.plugin.logging.Log
+import org.codehaus.plexus.util.{FileUtils, ReaderFactory}
 
 import scala.io.Source
 import scalariform.formatter.ScalaFormatter
@@ -27,16 +28,6 @@ object MojoFormatter {
     path.listFiles(dirFilter).foldLeft(runningList) { (sum, dir) =>
       findScalaFilesByFile(dir, sum)
     }
-  }
-
-  private def writeText(file: java.io.File, text: String, encodingOpt: Option[String] = None) {
-    import java.io.{FileOutputStream, OutputStreamWriter}
-    val encoding = encodingOpt getOrElse (System getProperty "file.encoding")
-    val writer = new OutputStreamWriter(new FileOutputStream(file), encoding)
-    try
-      writer.write(text)
-    finally
-      writer.close()
   }
 
   def format(log: Log,
@@ -107,6 +98,8 @@ object MojoFormatter {
     val files = findScalaFilesByFile(sourceDirectory, Nil) :::
       findScalaFilesByFile(testSourceDirectory, Nil)
 
+    val encoding = ReaderFactory.FILE_ENCODING
+
     var count = 0
 
     //TODO foreach with side effect
@@ -115,7 +108,7 @@ object MojoFormatter {
         val original = Source.fromFile(file).mkString
         val formatted = ScalaFormatter.format(original, preferences)
         if (original != formatted) {
-          writeText(file, formatted)
+          FileUtils.fileWrite(file, encoding, formatted)
           count += 1
         }
       } catch {
