@@ -237,4 +237,3 @@ public class ScalariformMojo extends AbstractMojo {
     }
 
 }
-
