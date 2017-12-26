@@ -29,6 +29,16 @@ object MojoFormatter {
     }
   }
 
+  private def writeText(file: java.io.File, text: String, encodingOpt: Option[String] = None) {
+    import java.io.{FileOutputStream, OutputStreamWriter}
+    val encoding = encodingOpt getOrElse (System getProperty "file.encoding")
+    val writer = new OutputStreamWriter(new FileOutputStream(file), encoding)
+    try
+      writer.write(text)
+    finally
+      writer.close()
+  }
+
   def format(log: Log,
              sourceDirectory: File,
              testSourceDirectory: File,
@@ -117,6 +127,5 @@ object MojoFormatter {
     }
     log.info("Modified " + count + " of " + files.size + " .scala files")
   }
-
 
 }
