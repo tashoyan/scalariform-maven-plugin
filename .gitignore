@@ -19,5 +19,6 @@ nohup.out
 .history
 .cache
 *.idea
+*.iml
 *.sw?
 
