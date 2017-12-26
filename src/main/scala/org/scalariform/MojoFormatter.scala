@@ -70,11 +70,11 @@ object MojoFormatter {
       AllowParamGroupsOnNewlines -> allowParamGroupsOnNewlines,
       CompactControlReadability -> compactControlReadability,
       CompactStringConcatenation -> compactStringConcatenation,
-      DanglingCloseParenthesis -> danglingCloseParenthesis,
+      DanglingCloseParenthesis -> IntentPreference.parseValue(danglingCloseParenthesis).right.get,
       DoubleIndentConstructorArguments -> doubleIndentConstructorArguments,
       DoubleIndentMethodDeclaration -> doubleIndentMethodDeclaration,
-      FirstArgumentOnNewline -> firstArgumentOnNewline,
-      FirstParameterOnNewline -> firstParameterOnNewline,
+      FirstArgumentOnNewline -> IntentPreference.parseValue(firstArgumentOnNewline).right.get,
+      FirstParameterOnNewline -> IntentPreference.parseValue(firstParameterOnNewline).right.get,
       FormatXml -> formatXml,
       IndentLocalDefs -> indentLocalDefs,
       IndentPackageBlocks -> indentPackageBlocks,
@@ -93,10 +93,16 @@ object MojoFormatter {
       SpacesAroundMultiImports -> spacesAroundMultiImports,
       SpacesWithinPatternBinders -> spacesWithinPatternBinders
     )
+    log.debug(prefs.mkString("Scalariform preferences:\n", "\n", ""))
     val preferences = new FormattingPreferences(prefs)
 
     val files = findScalaFilesByFile(sourceDirectory, Nil) :::
       findScalaFilesByFile(testSourceDirectory, Nil)
+
+    log.info(s"Formatting ${files.size} files")
+    log.debug("Source dir: " + sourceDirectory)
+    log.debug("Test source dir: " + testSourceDirectory)
+    log.debug(files.mkString("Scalariform files to format:\n", "\n", ""))
 
     val encoding = ReaderFactory.FILE_ENCODING
 
