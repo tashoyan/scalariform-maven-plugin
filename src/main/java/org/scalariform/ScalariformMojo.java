@@ -4,6 +4,9 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
+import java.io.File;
 
 /**
  * Goal which formats scala source files
@@ -11,138 +14,229 @@ import org.apache.maven.plugins.annotations.Mojo;
  * @goal format
  * @phase process-sources
  */
+@Mojo(name = "scalariform", defaultPhase = LifecyclePhase.PROCESS_SOURCES, requiresProject = false, threadSafe = true)
 public class ScalariformMojo extends AbstractMojo {
 
     /**
-     * Base directory of the project
-     *
-     * @parameter expression="${basedir}"
-     * @required
+     * Project's source directory as specified in the POM.
      */
-    protected String baseDir;
+    @Parameter(defaultValue = "${project.build.sourceDirectory}", property = "sourceDirectory", required = true)
+    private File sourceDirectory;
 
     /**
-     * @parameter default-value=false
+     * Project's test source directory as specified in the POM.
      */
-    protected boolean alignParameters;
+    @Parameter(defaultValue = "${project.build.testSourceDirectory}", property = "testSourceDirectory", required = true)
+    private File testSourceDirectory;
 
     /**
-     * @parameter default-value=false
+     * See <a href="https://github.com/scala-ide/scalariform#alignarguments">alignArguments</a>.
      */
-    protected boolean alignSingleLineCaseStatements;
+    @Parameter(defaultValue = "false", property = "scalariform.alignArguments")
+    private Boolean alignArguments;
 
     /**
-     * @parameter default-value=40
+     * See <a href="https://github.com/scala-ide/scalariform#alignparameters">alignParameters</a>.
      */
-    protected int alignSingleLineCaseStatements_maxArrowIndent;
+    @Parameter(defaultValue = "false", property = "scalariform.alignParameters")
+    private Boolean alignParameters;
 
     /**
-     * @parameter default-value=false
+     * See <a href="https://github.com/scala-ide/scalariform#alignsinglelinecasestatements">alignSingleLineCaseStatements</a>.
      */
-    protected boolean compactControlReadability;
+    @Parameter(defaultValue = "false", property = "scalariform.alignSingleLineCaseStatements")
+    private Boolean alignSingleLineCaseStatements;
 
     /**
-     * @parameter default-value=false
+     * See <a href="https://github.com/scala-ide/scalariform#alignsinglelinecasestatementsmaxarrowindent">alignSingleLineCaseStatements.maxArrowIndent</a>.
      */
-    protected boolean compactStringConcatenation;
+    @Parameter(defaultValue = "40", property = "scalariform.alignSingleLineCaseStatements.maxArrowIndent")
+    private Integer alignSingleLineCaseStatements_maxArrowIndent;
 
     /**
-     * @parameter default-value=true
+     * See <a href="https://github.com/scala-ide/scalariform#allowparamgroupsonnewlines">allowParamGroupsOnNewlines</a>.
      */
-    protected boolean doubleIndentClassDeclaration;
+    @Parameter(defaultValue = "false", property = "scalariform.allowParamGroupsOnNewlines")
+    private Boolean allowParamGroupsOnNewlines;
 
     /**
-     * @parameter default-value=true
+     * See <a href="https://github.com/scala-ide/scalariform#compactcontrolreadability">compactControlReadability</a>.
      */
-    protected boolean formatXml;
+    @Parameter(defaultValue = "false", property = "scalariform.compactControlReadability")
+    private Boolean compactControlReadability;
 
     /**
-     * @parameter default-value=false
+     * See <a href="https://github.com/scala-ide/scalariform#compactstringconcatenation">compactStringConcatenation</a>.
      */
-    protected boolean indentLocalDefs;
+    @Parameter(defaultValue = "false", property = "scalariform.compactStringConcatenation")
+    private Boolean compactStringConcatenation;
 
     /**
-     * @parameter default-value=true
+     * See <a href="https://github.com/scala-ide/scalariform#danglingcloseparenthesis">danglingCloseParenthesis</a>.
      */
-    protected boolean indentPackageBlocks;
+    @Parameter(defaultValue = "Prevent", property = "scalariform.danglingCloseParenthesis")
+    private String danglingCloseParenthesis;
 
     /**
-     * @parameter default-value=2
+     * See <a href="https://github.com/scala-ide/scalariform#doubleindentconstructorarguments">doubleIndentConstructorArguments</a>.
      */
-    protected int indentSpaces;
+    @Parameter(defaultValue = "false", property = "scalariform.doubleIndentConstructorArguments")
+    private Boolean doubleIndentConstructorArguments;
 
     /**
-     * @parameter default-value=false
+     * See <a href="https://github.com/scala-ide/scalariform#doubleindentmethoddeclaration">doubleIndentMethodDeclaration</a>.
      */
-    protected boolean indentWithTabs;
+    @Parameter(defaultValue = "false", property = "scalariform.doubleIndentMethodDeclaration")
+    private Boolean doubleIndentMethodDeclaration;
 
     /**
-     * @parameter default-value=false
+     * See <a href="https://github.com/scala-ide/scalariform#firstargumentonnewline">firstArgumentOnNewline</a>.
      */
-    protected boolean multilineScaladocCommentsStartOnFirstLine;
+    @Parameter(defaultValue = "Force", property = "scalariform.firstArgumentOnNewline")
+    private String firstArgumentOnNewline;
 
     /**
-     * @parameter default-value=false
+     * See <a href="https://github.com/scala-ide/scalariform#firstparameteronnewline">firstParameterOnNewline</a>.
      */
-    protected boolean placeScaladocAsterisksBeneathSecondAsterisk;
+    @Parameter(defaultValue = "Force", property = "scalariform.firstParameterOnNewline")
+    private String firstParameterOnNewline;
 
     /**
-     * @parameter default-value=false
+     * See <a href="https://github.com/scala-ide/scalariform#formatxml">formatXml</a>.
      */
-    protected boolean preserveDanglingCloseParenthesis;
+    @Parameter(defaultValue = "true", property = "scalariform.formatXml")
+    private Boolean formatXml;
 
     /**
-     * @parameter default-value=false
+     * See <a href="https://github.com/scala-ide/scalariform#indentlocaldefs">indentLocalDefs</a>.
      */
-    protected boolean preserveSpaceBeforeArguments;
+    @Parameter(defaultValue = "false", property = "scalariform.indentLocalDefs")
+    private Boolean indentLocalDefs;
 
     /**
-     * @parameter default-value=false
+     * See <a href="https://github.com/scala-ide/scalariform#indentpackageblocks">indentPackageBlocks</a>.
      */
-    protected boolean rewriteArrowSymbols;
+    @Parameter(defaultValue = "true", property = "scalariform.indentPackageBlocks")
+    private Boolean indentPackageBlocks;
 
     /**
-     * @parameter default-value=false
+     * See <a href="https://github.com/scala-ide/scalariform#indentspaces">indentSpaces</a>.
      */
-    protected boolean spaceBeforeColon;
+    @Parameter(defaultValue = "2", property = "scalariform.indentSpaces")
+    private Integer indentSpaces;
 
     /**
-     * @parameter default-value=false
+     * See <a href="https://github.com/scala-ide/scalariform#indentwithtabs">indentWithTabs</a>.
      */
-    protected boolean spaceInsideBrackets;
+    @Parameter(defaultValue = "false", property = "scalariform.indentWithTabs")
+    private Boolean indentWithTabs;
 
     /**
-     * @parameter default-value=false
+     * See <a href="https://github.com/scala-ide/scalariform#multilinescaladoccommentsstartonfirstline">multilineScaladocCommentsStartOnFirstLine</a>.
      */
-    protected boolean spaceInsideParentheses;
+    @Parameter(defaultValue = "false", property = "scalariform.multilineScaladocCommentsStartOnFirstLine")
+    private Boolean multilineScaladocCommentsStartOnFirstLine;
 
     /**
-     * @parameter default-value=true
+     * See <a href="https://github.com/scala-ide/scalariform#newlineatendoffile">newlineAtEndOfFile</a>.
      */
-    protected boolean spacesWithinPatternBinders;
+    @Parameter(defaultValue = "false", property = "scalariform.newlineAtEndOfFile")
+    private Boolean newlineAtEndOfFile;
 
+    /**
+     * See <a href="https://github.com/scala-ide/scalariform#placescaladocasterisksbeneathsecondasterisk">placeScaladocAsterisksBeneathSecondAsterisk</a>.
+     */
+    @Parameter(defaultValue = "false", property = "scalariform.placeScaladocAsterisksBeneathSecondAsterisk")
+    private Boolean placeScaladocAsterisksBeneathSecondAsterisk;
+
+    /**
+     * See <a href="https://github.com/scala-ide/scalariform#preservespacebeforearguments">preserveSpaceBeforeArguments</a>.
+     */
+    @Parameter(defaultValue = "false", property = "scalariform.preserveSpaceBeforeArguments")
+    private Boolean preserveSpaceBeforeArguments;
+
+    /**
+     * See <a href="https://github.com/scala-ide/scalariform#rewritearrowsymbols">rewriteArrowSymbols</a>.
+     */
+    @Parameter(defaultValue = "false", property = "scalariform.rewriteArrowSymbols")
+    private Boolean rewriteArrowSymbols;
+
+    /**
+     * See <a href="https://github.com/scala-ide/scalariform#singlecasepatternonnewline">singleCasePatternOnNewline</a>.
+     */
+    @Parameter(defaultValue = "true", property = "scalariform.singleCasePatternOnNewline")
+    private Boolean singleCasePatternOnNewline;
+
+    /**
+     * See <a href="https://github.com/scala-ide/scalariform#spacebeforecolon">spaceBeforeColon</a>.
+     */
+    @Parameter(defaultValue = "false", property = "scalariform.spaceBeforeColon")
+    private Boolean spaceBeforeColon;
+
+    /**
+     * See <a href="https://github.com/scala-ide/scalariform#spacebeforecontextcolon">spaceBeforeContextColon</a>.
+     */
+    @Parameter(defaultValue = "false", property = "scalariform.spaceBeforeContextColon")
+    private Boolean spaceBeforeContextColon;
+
+    /**
+     * See <a href="https://github.com/scala-ide/scalariform#spaceinsidebrackets">spaceInsideBrackets</a>.
+     */
+    @Parameter(defaultValue = "false", property = "scalariform.spaceInsideBrackets")
+    private Boolean spaceInsideBrackets;
+
+    /**
+     * See <a href="https://github.com/scala-ide/scalariform#spaceinsideparentheses">spaceInsideParentheses</a>.
+     */
+    @Parameter(defaultValue = "false", property = "scalariform.spaceInsideParentheses")
+    private Boolean spaceInsideParentheses;
+
+    /**
+     * See <a href="https://github.com/scala-ide/scalariform#spacesaroundmultiimports">spacesAroundMultiImports</a>.
+     */
+    @Parameter(defaultValue = "true", property = "scalariform.spacesAroundMultiImports")
+    private Boolean spacesAroundMultiImports;
+
+    /**
+     * See <a href="https://github.com/scala-ide/scalariform#spaceswithinpatternbinders">spacesWithinPatternBinders</a>.
+     */
+    @Parameter(defaultValue = "true", property = "scalariform.spacesWithinPatternBinders")
+    private Boolean spacesWithinPatternBinders;
+
+    @Override
     public void execute() throws MojoExecutionException {
 
-        MojoFormatter.format(baseDir, this.getLog(),
+        MojoFormatter.format(this.getLog(),
+                sourceDirectory,
+                testSourceDirectory,
+                alignArguments,
                 alignParameters,
                 alignSingleLineCaseStatements,
                 alignSingleLineCaseStatements_maxArrowIndent,
+                allowParamGroupsOnNewlines,
                 compactControlReadability,
                 compactStringConcatenation,
-                doubleIndentClassDeclaration,
+                danglingCloseParenthesis,
+                doubleIndentConstructorArguments,
+                doubleIndentMethodDeclaration,
+                firstArgumentOnNewline,
+                firstParameterOnNewline,
                 formatXml,
                 indentLocalDefs,
                 indentPackageBlocks,
                 indentSpaces,
                 indentWithTabs,
                 multilineScaladocCommentsStartOnFirstLine,
+                newlineAtEndOfFile,
                 placeScaladocAsterisksBeneathSecondAsterisk,
-                preserveDanglingCloseParenthesis,
                 preserveSpaceBeforeArguments,
                 rewriteArrowSymbols,
+                singleCasePatternOnNewline,
                 spaceBeforeColon,
+                spaceBeforeContextColon,
                 spaceInsideBrackets,
                 spaceInsideParentheses,
+                spacesAroundMultiImports,
                 spacesWithinPatternBinders);
     }
 
