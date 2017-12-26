@@ -110,7 +110,7 @@ object MojoFormatter {
     var count = 0
 
     //TODO foreach with side effect
-    files.foreach { file ⇒
+    files.foreach { file =>
       try {
         val original = Source.fromFile(file).mkString
         val formatted = ScalaFormatter.format(original, preferences)
@@ -119,9 +119,9 @@ object MojoFormatter {
           count += 1
         }
       } catch {
-        case ex: ScalaParserException ⇒
+        case ex: ScalaParserException =>
           log.error("Error parsing Scala " + file + ": " + ex.getMessage)
-        case ex: Exception ⇒
+        case ex: Exception =>
           log.error("Error formatting " + file + ": " + ex)
       }
     }
