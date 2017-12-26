@@ -202,7 +202,6 @@ public class ScalariformMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException {
-
         MojoFormatter.format(this.getLog(),
                 sourceDirectory,
                 testSourceDirectory,
