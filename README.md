@@ -1,5 +1,5 @@
 # Scalariform Maven plugin
-Maven plugin for Scalariform, a Scala code formatter.
+Maven plugin for [Scalariform](https://github.com/scala-ide/scalariform), a Scala code formatter.
 
 ### Usage
 
