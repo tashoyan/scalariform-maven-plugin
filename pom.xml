@@ -178,7 +178,7 @@
     </dependencies>
 
     <inceptionYear>2011</inceptionYear>
-    <url>http://github.com/mdr/scalariform-maven-plugin</url>
+    <url>http://github.com/tashoyan/scalariform-maven-plugin</url>
     <licenses>
         <license>
             <name>MIT License</name>
@@ -187,15 +187,20 @@
         </license>
     </licenses>
     <scm>
-        <url>git@github.com:mdr/scalariform-maven-plugin.git</url>
-        <connection>scm:git:git@github.com:mdr/scalariform-maven-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:mdr/scalariform-maven-plugin.git</developerConnection>
+        <url>git@github.com:tashoyan/scalariform-maven-plugin.git</url>
+        <connection>scm:git:git@github.com:tashoyan/scalariform-maven-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:tashoyan/scalariform-maven-plugin.git</developerConnection>
     </scm>
     <developers>
         <developer>
             <id>mdr</id>
             <name>Matt Russell</name>
             <url>https://github.com/mdr/</url>
+        </developer>
+        <developer>
+            <id>tashoyan</id>
+            <name>Arseniy Tashoyan</name>
+            <url>https://github.com/tashoyan</url>
         </developer>
     </developers>
 
