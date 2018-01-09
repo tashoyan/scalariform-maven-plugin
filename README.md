@@ -26,7 +26,7 @@ Add a section like below in your POM-file:
       ...
     </plugins>
 
-For settings documentation, see [Scalariform web page](https://github.com/scala-ide/scalariform)
+For settings documentation, see [Scalariform web page](https://github.com/scala-ide/scalariform#preferences)
 
 The plugin has just one goal: `format`, by default it is bound to `process-sources` lifecycle phase.
 
