@@ -7,7 +7,7 @@ Add a section like below in your POM-file:
 
     <plugins>
       <plugin>
-        <groupId>org.scalariform</groupId>
+        <groupId>com.github.tashoyan</groupId>
         <artifactId>scalariform-maven-plugin</artifactId>
         <version>0.2.0</version>
         <configuration>
