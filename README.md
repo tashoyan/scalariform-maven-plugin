@@ -34,6 +34,8 @@ The plugin has just one goal: `format`, by default it is bound to `process-sourc
 
 [MIT License](http://www.opensource.org/licenses/mit-license.php)
 
+### Credits
+
 Forked from [Matt Russell's repo](https://github.com/mdr/scalariform-maven-plugin) and updated to support Scalariform 0.2.x as well as Maven 3 API.
 
 Originally contributed to Scalariform by [Adam Crain](https://github.com/jadamcrain).
