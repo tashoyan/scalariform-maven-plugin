@@ -26,9 +26,16 @@ Add a section like below in your POM-file:
       ...
     </plugins>
 
-For settings documentation, see [Scalariform web page](https://github.com/scala-ide/scalariform#preferences).
-
 The plugin has just one goal: `format`, by default it is bound to `process-sources` lifecycle phase.
+
+### Settings
+
+| Name | Default value | Description |
+| ---- | ------------- | ----------- |
+| `sourceDirectory` | `${project.build.sourceDirectory}/../scala` | Directory with Scala sources |
+| `testSourceDirectory` | `${project.build.testSourceDirectory}/../scala` | Directory with Scala test sources |
+
+For Scalariform settings, see [Scalariform web page](https://github.com/scala-ide/scalariform#preferences).
 
 ### License
 
