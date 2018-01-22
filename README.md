@@ -1,4 +1,7 @@
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.tashoyan/scalariform-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.tashoyan/scalariform-maven-plugin)
+
 # Scalariform Maven plugin
+
 Maven plugin for [Scalariform](https://github.com/scala-ide/scalariform), a Scala code formatter.
 
 ### Usage
