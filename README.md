@@ -32,8 +32,8 @@ The plugin has just one goal: `format`, by default it is bound to `process-sourc
 
 | Name | Default value | Description |
 | ---- | ------------- | ----------- |
-| `sourceDirectory` | `${project.build.sourceDirectory}/../scala` | Directory with Scala sources |
-| `testSourceDirectory` | `${project.build.testSourceDirectory}/../scala` | Directory with Scala test sources |
+| `sourceDirectory` | `src/main/scala` | Directory with Scala sources |
+| `testSourceDirectory` | `src/test/scala` | Directory with Scala test sources |
 
 For Scalariform settings, see [Scalariform web page](https://github.com/scala-ide/scalariform#preferences).
 
