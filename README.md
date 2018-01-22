@@ -9,7 +9,7 @@ Add a section like below in your POM-file:
       <plugin>
         <groupId>com.github.tashoyan</groupId>
         <artifactId>scalariform-maven-plugin</artifactId>
-        <version>0.2.0</version>
+        <version>0.2.1</version>
         <configuration>
           <firstArgumentOnNewline>Force</firstArgumentOnNewline>
           <firstParameterOnNewline>Force</firstParameterOnNewline>
