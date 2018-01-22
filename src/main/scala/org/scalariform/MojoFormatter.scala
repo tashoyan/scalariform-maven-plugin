@@ -1,6 +1,6 @@
 package org.scalariform
 
-import java.io.{File, FileFilter, FilenameFilter}
+import java.io.{File, FileFilter}
 
 import org.apache.maven.plugin.logging.Log
 import org.codehaus.plexus.util.{FileUtils, ReaderFactory}
@@ -15,17 +15,26 @@ import scalariform.parser.ScalaParserException
   */
 object MojoFormatter {
 
-  private val scalaFilter = new FilenameFilter {
-    def accept(dir: File, name: String): Boolean = name.endsWith(".scala")
+  private val scalaFilter = new FileFilter {
+    def accept(file: File): Boolean =
+      file.isFile &&
+        file.getName.endsWith(".scala")
   }
 
   private val dirFilter = new FileFilter() {
     def accept(dir: File): Boolean = dir.isDirectory
   }
 
-  private def findScalaFilesByFile(path: File, list: List[File]): List[File] = {
-    val runningList = path.listFiles(scalaFilter).toList ::: list
-    path.listFiles(dirFilter).foldLeft(runningList) { (sum, dir) =>
+  private def findScalaFilesByFile(path: File, foundScalaFiles: List[File]): List[File] = {
+    val scalaFiles = Option(path.listFiles(scalaFilter))
+      .toList
+      .flatMap(_.iterator)
+    val newFoundScalaFiles = scalaFiles ::: foundScalaFiles
+
+    val subDirs = Option(path.listFiles(dirFilter))
+      .toList
+      .flatMap(_.iterator)
+    subDirs.foldLeft(newFoundScalaFiles) { (sum, dir) =>
       findScalaFilesByFile(dir, sum)
     }
   }
