@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.tashoyan</groupId>
     <artifactId>scalariform-maven-plugin</artifactId>
-    <version>0.2.1-SNAPSHOT</version>
+    <version>0.2.1</version>
     <packaging>maven-plugin</packaging>
     <name>Maven Scalariform Plugin</name>
     <description>Maven plugin to run Scalariform, a Scala code formatter</description>
