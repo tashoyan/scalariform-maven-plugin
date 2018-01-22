@@ -17,13 +17,13 @@ public class ScalariformMojo extends AbstractMojo {
     /**
      * Project's source directory as specified in the POM.
      */
-    @Parameter(defaultValue = "${project.build.sourceDirectory}/../scala", property = "sourceDir", required = true)
+    @Parameter(defaultValue = "src/main/scala", property = "sourceDir", required = true)
     private File sourceDirectory;
 
     /**
      * Project's test source directory as specified in the POM.
      */
-    @Parameter(defaultValue = "${project.build.testSourceDirectory}/../scala", property = "testSourceDir", required = true)
+    @Parameter(defaultValue = "src/test/scala", property = "testSourceDir", required = true)
     private File testSourceDirectory;
 
     /**
