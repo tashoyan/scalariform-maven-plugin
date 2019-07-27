@@ -4,11 +4,11 @@ import java.io.{File, FileFilter}
 
 import org.apache.maven.plugin.logging.Log
 import org.codehaus.plexus.util.{FileUtils, ReaderFactory}
-
-import scala.io.{Codec, Source}
 import scalariform.formatter.ScalaFormatter
 import scalariform.formatter.preferences._
 import scalariform.parser.ScalaParserException
+
+import scala.io.{Codec, Source}
 
 /**
   * Goal which formats scala source files.
@@ -46,39 +46,41 @@ object MojoFormatter {
     }
   }
 
-  def format(log: Log,
-             sourceDirectory: File,
-             testSourceDirectory: File,
-             alignArguments: Boolean,
-             alignParameters: Boolean,
-             alignSingleLineCaseStatements: Boolean,
-             alignSingleLineCaseStatements_maxArrowIndent: Int,
-             allowParamGroupsOnNewlines: Boolean,
-             compactControlReadability: Boolean,
-             compactStringConcatenation: Boolean,
-             danglingCloseParenthesis: String,
-             doubleIndentConstructorArguments: Boolean,
-             doubleIndentMethodDeclaration: Boolean,
-             firstArgumentOnNewline: String,
-             firstParameterOnNewline: String,
-             formatXml: Boolean,
-             indentLocalDefs: Boolean,
-             indentPackageBlocks: Boolean,
-             indentSpaces: Int,
-             indentWithTabs: Boolean,
-             multilineScaladocCommentsStartOnFirstLine: Boolean,
-             newlineAtEndOfFile: Boolean,
-             placeScaladocAsterisksBeneathSecondAsterisk: Boolean,
-             preserveSpaceBeforeArguments: Boolean,
-             rewriteArrowSymbols: Boolean,
-             singleCasePatternOnNewline: Boolean,
-             spaceBeforeColon: Boolean,
-             spaceBeforeContextColon: Boolean,
-             spaceInsideBrackets: Boolean,
-             spaceInsideParentheses: Boolean,
-             spacesAroundMultiImports: Boolean,
-             spacesWithinPatternBinders: Boolean,
-             useUnicodeArrows: Boolean): Unit = {
+  def format(
+              log: Log,
+              sourceDirectory: File,
+              testSourceDirectory: File,
+              alignArguments: Boolean,
+              alignParameters: Boolean,
+              alignSingleLineCaseStatements: Boolean,
+              alignSingleLineCaseStatements_maxArrowIndent: Int,
+              allowParamGroupsOnNewlines: Boolean,
+              compactControlReadability: Boolean,
+              compactStringConcatenation: Boolean,
+              danglingCloseParenthesis: String,
+              doubleIndentConstructorArguments: Boolean,
+              doubleIndentMethodDeclaration: Boolean,
+              firstArgumentOnNewline: String,
+              firstParameterOnNewline: String,
+              formatXml: Boolean,
+              indentLocalDefs: Boolean,
+              indentPackageBlocks: Boolean,
+              indentSpaces: Int,
+              indentWithTabs: Boolean,
+              multilineScaladocCommentsStartOnFirstLine: Boolean,
+              newlineAtEndOfFile: Boolean,
+              placeScaladocAsterisksBeneathSecondAsterisk: Boolean,
+              preserveSpaceBeforeArguments: Boolean,
+              rewriteArrowSymbols: Boolean,
+              singleCasePatternOnNewline: Boolean,
+              spaceBeforeColon: Boolean,
+              spaceBeforeContextColon: Boolean,
+              spaceInsideBrackets: Boolean,
+              spaceInsideParentheses: Boolean,
+              spacesAroundMultiImports: Boolean,
+              spacesWithinPatternBinders: Boolean,
+              useUnicodeArrows: Boolean
+            ): Unit = {
     val prefs = Map[PreferenceDescriptor[_], Any](
       AlignArguments -> alignArguments,
       AlignParameters -> alignParameters,
