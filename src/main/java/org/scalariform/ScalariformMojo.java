@@ -200,6 +200,12 @@ public class ScalariformMojo extends AbstractMojo {
     @Parameter(defaultValue = "true", property = "scalariform.spacesWithinPatternBinders")
     private Boolean spacesWithinPatternBinders;
 
+    /**
+     * See <a href="https://github.com/scala-ide/scalariform#useunicodearrows">useUnicodeArrows</a>.
+     */
+    @Parameter(defaultValue = "true", property = "scalariform.useUnicodeArrows")
+    private Boolean useUnicodeArrows;
+
     @Override
     public void execute() throws MojoExecutionException {
         MojoFormatter.format(this.getLog(),
@@ -233,7 +239,8 @@ public class ScalariformMojo extends AbstractMojo {
                 spaceInsideBrackets,
                 spaceInsideParentheses,
                 spacesAroundMultiImports,
-                spacesWithinPatternBinders);
+                spacesWithinPatternBinders,
+                useUnicodeArrows);
     }
 
 }

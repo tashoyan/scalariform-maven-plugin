@@ -77,7 +77,8 @@ object MojoFormatter {
              spaceInsideBrackets: Boolean,
              spaceInsideParentheses: Boolean,
              spacesAroundMultiImports: Boolean,
-             spacesWithinPatternBinders: Boolean): Unit = {
+             spacesWithinPatternBinders: Boolean,
+             useUnicodeArrows: Boolean): Unit = {
     val prefs = Map[PreferenceDescriptor[_], Any](
       AlignArguments -> alignArguments,
       AlignParameters -> alignParameters,
@@ -107,7 +108,8 @@ object MojoFormatter {
       SpaceInsideBrackets -> spaceInsideBrackets,
       SpaceInsideParentheses -> spaceInsideParentheses,
       SpacesAroundMultiImports -> spacesAroundMultiImports,
-      SpacesWithinPatternBinders -> spacesWithinPatternBinders
+      SpacesWithinPatternBinders -> spacesWithinPatternBinders,
+      UseUnicodeArrows -> useUnicodeArrows
     )
     log.debug(prefs.mkString("Scalariform preferences:\n", "\n", ""))
     val preferences = new FormattingPreferences(prefs)
