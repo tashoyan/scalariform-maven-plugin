@@ -5,7 +5,7 @@ import java.io.{File, FileFilter}
 import org.apache.maven.plugin.logging.Log
 import org.codehaus.plexus.util.{FileUtils, ReaderFactory}
 
-import scala.io.Source
+import scala.io.{Codec, Source}
 import scalariform.formatter.ScalaFormatter
 import scalariform.formatter.preferences._
 import scalariform.parser.ScalaParserException
@@ -36,6 +36,13 @@ object MojoFormatter {
       .flatMap(_.iterator)
     subDirs.foldLeft(newFoundScalaFiles) { (sum, dir) =>
       findScalaFilesByFile(dir, sum)
+    }
+  }
+
+  private def fromEither[T](descriptor: PreferenceDescriptor[T], either: Either[String, T]): T = {
+    either.getOrElse {
+      val msg = either.left.getOrElse(s"Failed to parse value for key: ${descriptor.key}")
+      throw new RuntimeException(msg)
     }
   }
 
@@ -79,11 +86,11 @@ object MojoFormatter {
       AllowParamGroupsOnNewlines -> allowParamGroupsOnNewlines,
       CompactControlReadability -> compactControlReadability,
       CompactStringConcatenation -> compactStringConcatenation,
-      DanglingCloseParenthesis -> IntentPreference.parseValue(danglingCloseParenthesis).right.get,
+      DanglingCloseParenthesis -> fromEither(DanglingCloseParenthesis, IntentPreference.parseValue(danglingCloseParenthesis)),
       DoubleIndentConstructorArguments -> doubleIndentConstructorArguments,
       DoubleIndentMethodDeclaration -> doubleIndentMethodDeclaration,
-      FirstArgumentOnNewline -> IntentPreference.parseValue(firstArgumentOnNewline).right.get,
-      FirstParameterOnNewline -> IntentPreference.parseValue(firstParameterOnNewline).right.get,
+      FirstArgumentOnNewline -> fromEither(FirstArgumentOnNewline, IntentPreference.parseValue(firstArgumentOnNewline)),
+      FirstParameterOnNewline -> fromEither(FirstParameterOnNewline, IntentPreference.parseValue(firstParameterOnNewline)),
       FormatXml -> formatXml,
       IndentLocalDefs -> indentLocalDefs,
       IndentPackageBlocks -> indentPackageBlocks,
@@ -114,6 +121,7 @@ object MojoFormatter {
     log.debug(files.mkString("Files to format:\n", "\n", ""))
 
     val encoding = ReaderFactory.FILE_ENCODING
+    implicit val codec: Codec = Codec(encoding)
 
     def formatFile(file: File): Int = {
       try {
