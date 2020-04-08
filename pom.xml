@@ -13,18 +13,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <compiler.java.version>1.8</compiler.java.version>
-        <compiler.scala.version>2.13.0</compiler.scala.version>
+        <compiler.scala.version>2.13.1</compiler.scala.version>
         <compiler.scala.compat.version>2.13</compiler.scala.compat.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <scala-maven-plugin.version>4.1.1</scala-maven-plugin.version>
-        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
-        <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
+        <scala-maven-plugin.version>4.3.1</scala-maven-plugin.version>
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
         <maven-plugin-plugin.version>3.6.0</maven-plugin-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
 
         <scalariform.version>0.2.10</scalariform.version>
-        <maven-pligin-api.version>3.6.1</maven-pligin-api.version>
+        <maven-pligin-api.version>3.6.3</maven-pligin-api.version>
         <maven-plugin-annotations.version>3.6.0</maven-plugin-annotations.version>
     </properties>
 
