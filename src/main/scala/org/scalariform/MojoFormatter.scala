@@ -6,9 +6,9 @@ import org.apache.maven.plugin.logging.Log
 import org.codehaus.plexus.util.{FileUtils, ReaderFactory}
 import scalariform.formatter.ScalaFormatter
 import scalariform.formatter.preferences._
-import scalariform.parser.ScalaParserException
 
 import scala.io.{Codec, Source}
+import scala.util.{Failure, Success, Using}
 
 /**
   * Goal which formats scala source files.
@@ -128,19 +128,18 @@ object MojoFormatter {
     implicit val codec: Codec = Codec(encoding)
 
     def formatFile(file: File): Int = {
-      try {
-        val original = Source.fromFile(file).mkString
-        val formatted = ScalaFormatter.format(original, preferences)
-        if (original != formatted) {
-          FileUtils.fileWrite(file, encoding, formatted)
-          1
-        } else 0
-      } catch {
-        case ex: ScalaParserException =>
-          log.error("Error parsing Scala code in " + file + ": " + ex.getMessage)
-          0
-        case ex: Exception =>
-          log.error("Error formatting " + file + ": " + ex)
+      val original = Using(Source.fromFile(file))(_.mkString)
+      val formatted = original.map(origCode => ScalaFormatter.format(origCode, preferences))
+      formatted match {
+        case Success(formattedCode) =>
+          if (formattedCode != original.get) {
+            FileUtils.fileWrite(file, encoding, formattedCode)
+            1
+          } else {
+            0
+          }
+        case Failure(e) =>
+          log.error("Failed to format", e)
           0
       }
     }
